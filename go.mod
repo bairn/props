@@ -1,6 +1,6 @@
 module github.com/bairn/props
 
-go 1.12
+go 1.14
 
 //被墙的原因，替换golang.org源为github.com源
 replace (
