@@ -1,0 +1,83 @@
+language: go
+sudo: enabled
+before_install:
+  - mkdir bin
+#  - wget http://www-us.apache.org/dist/zookeeper/zookeeper-3.4.10/zookeeper-3.4.10.tar.gz
+#  - tar -zxvf zookeeper*tar.gz
+#  - mv zookeeper-3.4.10/conf/zoo_sample.cfg zookeeper-3.4.10/conf/zoo.cfg
+#  - zookeeper-3.4.10/bin/zkServer.sh start
+  - wget https://releases.hashicorp.com/consul/1.2.0/consul_1.2.0_linux_amd64.zip
+  - unzip consul_1.2.0_linux_amd64.zip  -d ./bin/
+#  - mv ./consul ./bin
+  - wget https://github.com/coreos/etcd/releases/download/v3.3.8/etcd-v3.3.8-linux-amd64.tar.gz
+  - tar -zxvf etcd-v3.3.8-linux-amd64.tar.gz
+  - mv ./etcd-v3.3.8-linux-amd64/etcd ./bin
+  - export PATH=`pwd`:`pwd`/bin:$PATH
+  - pwd
+  - ls -l
+  - echo $PATH
+#  - nohup consul agent -dev &
+#  - nohup etcd --data-dir=./temp/etcd &
+
+branches:
+  only:
+    - develop
+    - master
+#notifications:
+#  email:
+#    recipients:
+#      - wtt.2012@gmail.com
+#  on_success: change
+#  on_failure: always
+
+install:
+  - go get -u github.com/golang/dep/cmd/dep
+  - dep ensure
+  - dep ensure -update
+#  - go get -u github.com/go-ini/ini
+#  - go get -u github.com/gopherjs/gopherjs
+#  - go get -u github.com/hashicorp/consul
+#  - go get -u github.com/hashicorp/go-cleanhttp
+#  - go get -u github.com/hashicorp/go-rootcerts
+#  - go get -u github.com/hashicorp/serf
+#  - go get -u github.com/jtolds/gls
+#  - go get -u github.com/mattn/go-colorable
+#  - go get -u github.com/mattn/go-isatty
+#  - go get -u github.com/mgutz/ansi
+#  - go get -u github.com/mitchellh/go-homedir
+#  - go get -u github.com/samuel/go-zookeeper/zk ...
+#  - go get -u github.com/sirupsen/logrus
+#  - go get -u github.com/smartystreets/assertions
+#  - go get -u github.com/smartystreets/goconvey
+#  - go get -u github.com/tietang/go-utils
+#  - go get -u github.com/valyala/bytebufferpool
+#  - go get -u github.com/valyala/fasttemplate
+#  - go get -u github.com/mattn/goveralls
+#  - go get -u google.golang.org/grpc ...
+#  - go get -u github.com/coreos/etcd ...
+
+
+#  - go get -u golang.org/x/crypto ...
+#  - go get -u golang.org/x/sys ...
+
+script:
+  - echo $COVERALLS_TOKEN
+#  - go test -v -covermode=count -coverprofile=coverage.out
+#  - $HOME/gopath/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+  - go test -i -v -race ./...
+  - go test -race ./... -covermode atomic -coverprofile=coverage.cov
+#  - go test -v -coverprofile=coverage.cov -coverpkg=./... ./...
+#  - go test -v -coverprofile=coverage.cov -coverpkg=./... ./...
+#  - goveralls -coverprofile=coverage.cov -service=travis-ci
+
+#  - (go env GOPATH | awk 'BEGIN{FS=":"} {print $1}')/bin/goveralls -coverprofile=coverage.out -service=travis-ci -repotoken $COVERALLS_TOKEN
+
+go:
+#  - 1.9.x
+  - 1.10.x
+
+env:
+  global:
+    secure: UoAxs7DjoiPFPhTS4wOeDgK73MXRQivqtkEQYfpm6hfK56u/YdngvAX4/CMEE0ExKD6yMFiiFQWjE8SlC7v7AwIe7Xp2b5HYtcgPOTsO3bl07iSWt1G7FOuR+fh7mwX692krLARiHhZ2mUv8OXYsoUglz3EQ3BoS9ny/FZV5HBEOuHhFQNt1lUllwFl7LZrCHUpR9TuPzXaiWIddgHYquFamrUjeW2DbwxtvExwKeuturdyrZ62YHaEkQZmxEL54Q8sOO7BgylbdY7yIbeGDe8YeEkqhOXZeFI9umaIFzFwJXfAeGv0sGGPYx/XpJkeWTBRUzK69VrrLEFH4hVo+t366lYab3D5hXZo5NJjEwXQX80ABkCdmnFde7bm5D4gMINRpOFkZJkjhPeFm5ICpUNq5YmAs7pS3VJkt6G3mQdbNKZ5To98MyCPCYC+s8Vp5NugLx9t9TLZ9sopZA/2VNMpZpivF2nQklWJiiPhdEjTbiy7eba7fE84OAxQXW/5akExTvm8XBnkRMMjI3osqwlRImSrNLCaqK42CDeDafZMd247YlIxlksVlWeEmm92T7edprBZjpakWacdZz+J9wv5/F0EG+/hPRGidBRLTshVa18fYsCniB5pszesqrUtsNqMassloxc5jE3XXzlxzg3mwzg93JrNm4NYGlNHiMQU=
+
+
